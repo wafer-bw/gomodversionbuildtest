@@ -9,12 +9,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func getBuildInfo() (string, error) {
+func getBuildInfo() (*debug.BuildInfo, error) {
 	buildInfo, ok := debug.ReadBuildInfo()
 	if !ok {
-		return "", errors.New("unable to read build info")
+		return nil, errors.New("unable to read build info")
 	}
-	return buildInfo.String(), nil
+	return buildInfo, nil
 }
 
 func index(w http.ResponseWriter, _ *http.Request) {
@@ -32,7 +32,7 @@ func info(w http.ResponseWriter, _ *http.Request) {
 		}
 		return
 	}
-	if _, err := w.Write([]byte(buildInfo)); err != nil {
+	if _, err := w.Write([]byte(buildInfo.String())); err != nil {
 		log.Println(err)
 	}
 }
@@ -50,6 +50,14 @@ func main() {
 		Handler: handler(),
 	}
 	log.Println(s.Addr)
-	log.Println(getBuildInfo())
+
+	bi, err := getBuildInfo()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(bi.String())
+	log.Println("============")
+	log.Println(bi.Main.Version)
+	log.Println(bi.Main.Sum)
 	log.Fatal(s.ListenAndServe())
 }
