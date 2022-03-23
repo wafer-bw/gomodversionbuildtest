@@ -56,7 +56,5 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Println(bi.String())
-	log.Println("============")
-	log.Println(bi.Main.Version)
 	log.Fatal(s.ListenAndServe())
 }
