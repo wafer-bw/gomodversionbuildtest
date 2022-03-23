@@ -58,6 +58,5 @@ func main() {
 	log.Println(bi.String())
 	log.Println("============")
 	log.Println(bi.Main.Version)
-	log.Println(bi.Main.Sum)
 	log.Fatal(s.ListenAndServe())
 }
